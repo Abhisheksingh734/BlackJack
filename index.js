@@ -12,23 +12,45 @@ const generateDeck=()=>{
     }
     return deck;
 };
-const deck = generateDeck();
 
 
 const drawCard = (deck)=>{
-
-    let randomInd = Math.floor(Math.random() * deck.length)
-
+	
+	let randomInd = Math.floor(Math.random() * deck.length)
+	
     let cards = deck[randomInd];
-
+	
     deck.splice(randomInd, 1);
-
-    //start deleting from randomInd and deletes 1 item
+	
+    //randomInd se start hoga, 1 item delete krega 
     return cards;
-
+	
 }
 
+const checkScore=(hand)=>{
+	let total = 0;
+    for(const cardObj of hand){
+		if(cardObj.Card === "King"){
+			total += 10;
+        }
+        else if(cardObj.Card === "Queen"){
+			total += 10;
+        }
+        else if(cardObj.Card === "Jack"){
+			total += 10;
+        }
+        else if(cardObj.Card === "Ace"){
+			total += 1;
+        }
+        else{
+			total += Number(cardObj.Card);
+        }
+    }
+    return total;
+	
+}
 // const myCards = drawCard(deck);
+const deck = generateDeck();
 
 
 const playerHand = [];
@@ -39,28 +61,7 @@ playerHand.push(drawCard(deck));
 dealerHand.push(drawCard(deck));
 dealerHand.push(drawCard(deck));
 
-const checkScore=(hand)=>{
-    let total = 0;
-    for(const cardObj of hand){
-        if(cardObj.Card === "King"){
-            total += 10;
-        }
-        else if(cardObj.Card === "Queen"){
-            total += 10;
-        }
-        else if(cardObj.Card === "Jack"){
-            total += 10;
-        }
-        else if(cardObj.Card === "Ace"){
-            total += 1;
-        }
-        else{
-            total += Number(cardObj.Card);
-        }
-    }
-    return total;
 
-}
 
 console.log("Starting Player Hand: ",playerHand);
 console.log("Starting Player Score: ",checkScore(playerHand));
@@ -86,7 +87,7 @@ while (true){
 
 	dealerScore = checkScore(dealerHand);
 
-	if(dealerScore>21){
+	if(dealerScor>21){
 		console.log(`You Win! Your final score was ${playerScore} while dealer had ${dealerScore}`);
 		break;
 	}
