@@ -1,89 +1,103 @@
-const cards = ["2","3","4","5","6","7","8","9","10","King","Queen","Jack","Ace"]
-const suits = ["Heart","Spade","Club","Diamond"]
+const generateDeck=()=>{
 
-let createDeck = (cards, suits) => {
-  let deck = [];
-  for(let i=0;i<cards.length;i++){
-    for(let j=0; j<suits.length;j++){
-        deck.push(
-            {
-                Cards: cards[i],
-                Suits : suits[j]
-            }
-        )
+    const cards = ["2","3","4","5","6","7","8","9","10","King","Queen","Jack","Ace"]
+    const suits = ["Heart","Spade","Club","Diamond"]
+    
+    let deck = [];
+    
+    for(let card of cards){
+        for(let suit of suits){
+            deck.push({Card:card,Suit:suit})
+        }
     }
-  }
-  return deck;
+    return deck;
 };
-
-let deck = createDeck(cards,suits);
-console.log(deck);
+const deck = generateDeck();
 
 
-//---- generate a drawCard() function  
+const drawCard = (deck)=>{
 
-const drawCards = (deck,n)=>{
-    let cardsDrawn = [];
-    for(let i =0; i<n;i++){
-        cardsDrawn.push(deck[Math.floor(Math.random()*deck.length)])
-    }
-    return cardsDrawn;
+    let randomInd = Math.floor(Math.random() * deck.length)
+
+    let cards = deck[randomInd];
+
+    deck.splice(randomInd, 1);
+
+    //start deleting from randomInd and deletes 1 item
+    return cards;
+
 }
 
-let userCards = drawCards(deck,2);
-let dealerCards = drawCards(deck,2);
-
-console.log(userCards);
-console.log(dealerCards);
-
-//------------check the scores
+// const myCards = drawCard(deck);
 
 
+const playerHand = [];
+const dealerHand = [];
 
+playerHand.push(drawCard(deck));
+playerHand.push(drawCard(deck));
+dealerHand.push(drawCard(deck));
+dealerHand.push(drawCard(deck));
 
+const checkScore=(hand)=>{
+    let total = 0;
+    for(const cardObj of hand){
+        if(cardObj.Card === "King"){
+            total += 10;
+        }
+        else if(cardObj.Card === "Queen"){
+            total += 10;
+        }
+        else if(cardObj.Card === "Jack"){
+            total += 10;
+        }
+        else if(cardObj.Card === "Ace"){
+            total += 1;
+        }
+        else{
+            total += Number(cardObj.Card);
+        }
+    }
+    return total;
 
+}
 
+console.log("Starting Player Hand: ",playerHand);
+console.log("Starting Player Score: ",checkScore(playerHand));
+console.log("Starting dealer Hand: ",dealerHand);
+console.log("Starting dealer Score: ",checkScore(dealerHand));
+while (true){
+	playerHand.push(drawCard(deck));
+	//deal player card
+	const playerScore = checkScore(playerHand);
+	let dealerScore = checkScore(dealerHand);
 
+	if(playerScore>21){
+		console.log(`You lose! Your final score was ${playerScore} while dealer had ${dealerScore}`);
+		break;
+	}
 
+	if(playerScore === 21){
+		console.log(`You Win! Your final score was ${playerScore} while dealer had ${dealerScore}`);
+		break;
+	}
 
+	dealerHand.push(drawCard(deck));
 
+	dealerScore = checkScore(dealerHand);
 
+	if(dealerScore>21){
+		console.log(`You Win! Your final score was ${playerScore} while dealer had ${dealerScore}`);
+		break;
+	}
+	if(dealerScore === 21){
+		console.log(`You lose! Your final score was ${playerScore} while dealer had ${dealerScore}`);
+		break;
+	}
+	
+}
 
-
-
-
-
-// const allPossibleCollections = [];
-
-// console.log(myCards)
-// for(let i =0; i<suits.length;i++){
-//     for(let j =0; j<cards.length;j++){
-//         allPossibleCollections.push([suits[i],myCards.get(cards[j])])
-//     }
-// }
-
-// let userPoints = 0;
-// let dealerPoints = 0;
-
-// console.log(allPossibleCollections);
-
-// const userInitCards = allPossibleCollections[Math.ceil(Math.random()*50)]
-// const DealerInitCards = allPossibleCollections[Math.ceil(Math.random()*50)]
-
-// console.log(userInitCards);
-// userPoints += userInitCards[1];
-// console.log("User points: "+userPoints);
-
-// console.log(DealerInitCards);
-// dealerPoints += DealerInitCards[1];
-// console.log("Dealer points: "+dealerPoints);
-
-
-
-
-// // const allPossibleCollections = new Map();
-
-
-
-
-
+console.log("Ending Player Hand: ",playerHand);
+console.log("Ending Player Score: ",checkScore(playerHand));
+console.log("Ending dealer Hand: ",dealerHand);
+console.log("Ending dealer Score: ",checkScore(dealerHand));
